@@ -1,0 +1,43 @@
+string s, t;
+    cin >> s >> t;
+    ll sp = sz(s), tp = sz(t);
+    vvll dp(sp + 1, vll(tp + 1, -1));
+    string temp;
+    rep(j, 0, tp + 1) dp[0][j] = 0;
+    rep(j, 0, sp + 1) dp[j][0] = 0;
+
+    rep(i, 1, sp + 1)
+    {
+        rep(j, 1, tp + 1)
+        {
+            ll ans = LLONG_MIN;
+            if (s[i - 1] == t[j - 1])
+            {
+                ans = max(ans, 1 + dp[i - 1][j - 1]);
+            }
+            else
+            {
+                ans = max(dp[i - 1][j], dp[i][j - 1]);
+            }
+            dp[i][j] = ans;
+        }
+    }
+
+    sp = sz(s), tp = sz(t);
+    string ans;
+    while (sp > 0 && tp > 0)
+    {
+        if (s[sp - 1] == t[tp - 1])
+        {
+            ans += s[sp - 1];
+            --sp, --tp;
+        }
+        else if (dp[sp - 1][tp] > dp[sp][tp - 1])
+        {
+            --sp;
+        }
+        else
+            --tp;
+    }
+    reverse(all(ans));
+    cout << ans << nl;
